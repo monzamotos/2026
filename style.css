@@ -98,6 +98,19 @@ body {
   min-width: 0;
 }
 
+.hero__intro {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(224, 241, 245, 0.92));
+  border: 1px solid rgba(0, 95, 115, 0.12);
+  border-radius: 24px;
+  padding: 22px 20px 18px;
+  box-shadow: var(--shadow);
+}
+
+html[data-theme="dark"] .hero__intro {
+  background: linear-gradient(145deg, rgba(27, 39, 51, 0.96), rgba(33, 54, 66, 0.96));
+  border-color: rgba(131, 197, 190, 0.16);
+}
+
 /* Small eyebrow above the main title (visual only) */
 .hero__eyebrow {
   display: inline-block;
@@ -143,6 +156,48 @@ body {
   margin-bottom: 12px;
 }
 
+.nav-toggle {
+  display: none;
+  align-items: center;
+  border: 1px solid rgba(0, 95, 115, 0.18);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--text);
+  justify-content: center;
+  padding: 12px;
+  font: inherit;
+  font-weight: 800;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+
+.nav-toggle__icon {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-toggle__icon span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-toggle.is-open .nav-toggle__icon span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.nav-toggle.is-open .nav-toggle__icon span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle.is-open .nav-toggle__icon span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
 .theme-switch {
   position: fixed;
   top: 10px;
@@ -150,17 +205,37 @@ body {
   z-index: 1000;
   width: 30px;
   height: 30px;
-  border-radius: 50%;
-  border: 1px solid #31578f;
-  background: linear-gradient(145deg, #19355f 0%, #2f6fba 100%);
+  border-radius: 0;
+  border: 0;
+  background: transparent;
   color: #e6edf3;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(12, 21, 30, 0.22);
-  transition: background 0.25s ease, border-color 0.25s ease;
+  box-shadow: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.theme-switch:hover {
+  opacity: 0.92;
+  transform: scale(1.04);
+}
+
+.theme-switch:focus {
+  outline: none;
+}
+
+/* Hide focus ring for mouse clicks; show subtle ring for keyboard focus */
+.theme-switch:focus:not(:focus-visible) {
+  box-shadow: none;
+}
+
+.theme-switch:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 6px rgba(255, 210, 0, 0.18);
+  border-radius: 6px;
 }
 
 .theme-switch__thumb {
@@ -220,8 +295,7 @@ body {
 }
 
 .theme-switch[aria-pressed="true"] {
-  background: linear-gradient(145deg, #ff9c3d 0%, #ffd34f 100%);
-  border-color: #b96f00;
+  background: transparent;
 }
 
 .theme-switch[aria-pressed="true"] .theme-switch__icon--sun {
@@ -262,6 +336,54 @@ body {
   border-left: 1px solid #c7d4df;
   transform: rotate(45deg);
 }
+
+/* Global focus behavior: remove default outlines on mouse click, keep accessible ring for keyboard users */
+button:focus,
+a:focus,
+input:focus,
+textarea:focus,
+select:focus,
+[role="button"]:focus {
+  outline: none;
+}
+
+/* When focused but not via keyboard, hide custom ring */
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+[role="button"]:focus:not(:focus-visible) {
+  box-shadow: none !important;
+}
+
+/* If the user is interacting with pointer devices, hide focus rings globally */
+.using-pointer button:focus,
+.using-pointer a:focus,
+.using-pointer input:focus,
+.using-pointer textarea:focus,
+.using-pointer select:focus,
+.using-pointer [role="button"]:focus {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* More robust: hide any focus visuals while interacting with pointer */
+.using-pointer *:focus {
+  box-shadow: none !important;
+  outline: none !important;
+}
+/* Keyboard focus-visible ring (subtle, uses sun color) */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[role="button"]:focus-visible {
+  box-shadow: 0 0 0 6px rgba(255, 210, 0, 0.18);
+  border-radius: 6px;
+}
+
 
 .theme-hint p {
   margin: 0 0 8px;
@@ -314,6 +436,7 @@ h3 {
 .subtitle {
   color: var(--muted);
   max-width: 60ch;
+  margin-bottom: 0;
 }
 
 .hero__logo {
@@ -328,6 +451,10 @@ h3 {
   flex-wrap: wrap;
   gap: 16px;
   margin-top: 18px;
+}
+
+.hero__nav.is-open {
+  display: flex;
 }
 
 .hero__nav a {
@@ -835,9 +962,45 @@ button {
     flex-direction: column;
   }
 
+  .hero__intro {
+    padding: 18px 16px 16px;
+  }
+
   .hero__toolbar {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+  }
+
+  .hero__nav {
+    position: fixed;
+    left: 12px;
+    top: 68px;
+    width: min(280px, calc(100vw - 24px));
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    margin-top: 0;
+    border: 1px solid rgba(0, 95, 115, 0.16);
+    border-radius: 16px;
+    background: var(--panel);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateX(-120%);
+    pointer-events: none;
+    z-index: 1100;
+    transition: transform 0.24s ease, opacity 0.2s ease;
+  }
+
+  .hero__nav.is-open {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
   }
 
   .theme-switch {
@@ -887,6 +1050,10 @@ button {
   html[data-theme="dark"] .subtitle {
     color: #f2f7fb;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  }
+
+  html[data-theme="dark"] .hero__nav {
+    border-color: rgba(131, 197, 190, 0.2);
   }
 
   html[data-theme="dark"] .hero__nav a {

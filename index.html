@@ -24,26 +24,52 @@
     <div class="hero__content container">
       <div>
         <div class="hero__toolbar">
+          <button type="button" id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="primaryNavigation" aria-label="Abrir menu de navegação">
+            <span class="nav-toggle__icon" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </button>
           <button type="button" id="themeToggle" class="theme-switch" aria-pressed="false" aria-label="Alternar entre tema claro e escuro">
             <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true">
-              <span class="icon-sun-core"></span>
+              <!-- Sun with 12 rays -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <g fill="#FFD200">
+                  <circle cx="12" cy="12" r="4" />
+                  <rect x="11" y="1" width="2" height="4" rx="1" />
+                  <rect x="11" y="19" width="2" height="4" rx="1" transform="rotate(180 12 21)" />
+                  <rect x="19" y="11" width="2" height="4" rx="1" transform="rotate(90 20 13)" />
+                  <rect x="5" y="11" width="2" height="4" rx="1" transform="rotate(270 6 13)" />
+                  <rect x="17.2" y="3.8" width="2" height="4" rx="1" transform="rotate(45 18.2 5.8)" />
+                  <rect x="6.8" y="16.2" width="2" height="4" rx="1" transform="rotate(225 7.8 18.2)" />
+                  <rect x="17.2" y="16.2" width="2" height="4" rx="1" transform="rotate(135 18.2 18.2)" />
+                  <rect x="6.8" y="3.8" width="2" height="4" rx="1" transform="rotate(315 7.8 5.8)" />
+                  <rect x="12" y="0.4" width="2" height="3" rx="1" transform="rotate(15 13 2.9)" />
+                  <rect x="12" y="20.6" width="2" height="3" rx="1" transform="rotate(195 13 22.1)" />
+                  <rect x="3" y="12" width="2" height="3" rx="1" transform="rotate(105 4 13.5)" />
+                  <rect x="19" y="12" width="2" height="3" rx="1" transform="rotate(285 20 13.5)" />
+                </g>
+              </svg>
             </span>
             <span class="theme-switch__icon theme-switch__icon--moon" aria-hidden="true">
-              <span class="icon-moon-core"></span>
-              <span class="icon-star icon-star--one"></span>
-              <span class="icon-star icon-star--two"></span>
+              <!-- Simple moon icon -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="#FFF"/>
+              </svg>
             </span>
-            <span class="theme-switch__thumb" aria-hidden="true"></span>
           </button>
           <div id="themeHint" class="theme-hint" role="status" aria-live="polite">
             <p><strong>Dica:</strong> use este interruptor para alternar entre os temas claro e escuro.</p>
             <button type="button" id="themeHintClose" class="theme-hint__close" aria-label="Fechar dica">Entendi</button>
           </div>
         </div>
-        <h1 align="center">SEJA BEM-VINDO</h1>
-        <img class="hero__logo" src="img/logo_banner.png" alt="Logo da Monza Motos">
-        <p class="subtitle">Na Monza Motos, sua moto recebe cuidado técnico, diagnóstico preciso e serviço de confiança para você rodar com segurança.</p>
-        <nav aria-label="Navegação principal" class="hero__nav">
+        <div class="hero__intro">
+          <h1 align="center">SEJA BEM-VINDO</h1>
+          <img class="hero__logo" src="img/logo_banner.png" alt="Logo da Monza Motos">
+          <p class="subtitle">Na Monza Motos, sua moto recebe cuidado técnico, diagnóstico preciso e serviço de confiança para você rodar com segurança.</p>
+        </div>
+        <nav aria-label="Navegação principal" class="hero__nav" id="primaryNavigation">
           <a href="#cadastro">Agendar atendimento</a>
           <a href="#recursos">Nossos serviços</a>
           <a href="#contato">Falar no WhatsApp</a>
@@ -180,8 +206,6 @@
         </ul>
       </aside>
     </section>
-  </main>
-
   <footer id="contato" class="footer">
     <div class="footer__inner container">
       <div class="footer__brand">

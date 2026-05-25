@@ -1,4 +1,6 @@
 const form = document.getElementById('empresaForm');
+const navToggle = document.getElementById('navToggle');
+const primaryNavigation = document.getElementById('primaryNavigation');
 const themeToggle = document.getElementById('themeToggle');
 const themeHint = document.getElementById('themeHint');
 const themeHintClose = document.getElementById('themeHintClose');
@@ -170,6 +172,30 @@ function setTheme(theme) {
 function toggleTheme() {
   const currentTheme = htmlRoot.getAttribute('data-theme');
   setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+}
+
+function setNavigationState(isOpen) {
+  if (!navToggle || !primaryNavigation) {
+    return;
+  }
+
+  navToggle.classList.toggle('is-open', isOpen);
+  navToggle.setAttribute('aria-expanded', String(isOpen));
+  navToggle.setAttribute('aria-label', isOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
+  primaryNavigation.classList.toggle('is-open', isOpen);
+}
+
+function toggleNavigation() {
+  if (!navToggle || !primaryNavigation) {
+    return;
+  }
+
+  const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+  setNavigationState(!isOpen);
+}
+
+function closeNavigation() {
+  setNavigationState(false);
 }
 
 function hideThemeHint() {
@@ -562,6 +588,81 @@ themeToggle.addEventListener('click', () => {
   toggleTheme();
   hideThemeHint();
 });
+
+// Remove visual focus when activating with mouse/pointer, keep focus for keyboard
+if (themeToggle) {
+  themeToggle.addEventListener('pointerdown', (ev) => {
+    try {
+      if (ev.pointerType === 'mouse') {
+        // Delay blur slightly so click still activates
+        window.setTimeout(() => { themeToggle.blur(); }, 0);
+      }
+    } catch (e) {
+      // ignore
+    }
+  });
+}
+
+// Global pointer/keyboard tracker: add class when using pointer, remove on Tab (keyboard)
+(function () {
+  function setUsingPointer() {
+    try { document.documentElement.classList.add('using-pointer'); } catch (e) {}
+  }
+
+  function clearUsingPointer() {
+    try { document.documentElement.classList.remove('using-pointer'); } catch (e) {}
+  }
+
+  document.addEventListener('pointerdown', (ev) => {
+    // mark pointer usage for mouse/pen/touch
+    setUsingPointer();
+  }, { passive: true });
+
+  document.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Tab') {
+      clearUsingPointer();
+    }
+  }, { passive: true });
+})();
+
+// Blur selects and inputs with datalist after change when using pointer
+(function () {
+  function onChangeBlurIfPointer(ev) {
+    try {
+      if (document.documentElement.classList.contains('using-pointer')) {
+        ev.target.blur();
+      }
+    } catch (e) {}
+  }
+
+  // Select elements
+  document.querySelectorAll('select').forEach((el) => {
+    el.addEventListener('change', onChangeBlurIfPointer);
+  });
+
+  // Inputs that use datalist (have list attribute)
+  document.querySelectorAll('input[list]').forEach((el) => {
+    el.addEventListener('change', onChangeBlurIfPointer);
+  });
+})();
+
+if (navToggle && primaryNavigation) {
+  navToggle.addEventListener('click', toggleNavigation);
+
+  primaryNavigation.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      if (window.matchMedia('(max-width: 980px)').matches) {
+        closeNavigation();
+      }
+    });
+  });
+
+  window.addEventListener('resize', () => {
+    if (!window.matchMedia('(max-width: 980px)').matches) {
+      closeNavigation();
+    }
+  });
+}
 
 if (themeHintClose) {
   themeHintClose.addEventListener('click', () => {
